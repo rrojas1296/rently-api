@@ -5,23 +5,23 @@ import jose from 'jose';
 export const generateTokens = async (
   payload: IPayload,
 ): Promise<{
-  access_token: string;
-  refresh_token: string;
+  accessToken: string;
+  refreshToken: string;
 }> => {
   const { sub, email } = payload;
   const jwtSecret = new TextEncoder().encode(JWT_SECRET);
   const refreshSecret = new TextEncoder().encode(JWT_SECRET);
   const token = new jose.SignJWT({ sub, email });
 
-  const access_token = await token
+  const accessToken = await token
     .setProtectedHeader({ alg: 'HS256' })
     .setExpirationTime('1h')
     .sign(jwtSecret);
 
-  const refresh_token = await token
+  const refreshToken = await token
     .setProtectedHeader({ alg: 'HS256' })
     .setExpirationTime('7d')
     .sign(refreshSecret);
 
-  return { access_token, refresh_token };
+  return { accessToken, refreshToken };
 };

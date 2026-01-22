@@ -9,10 +9,10 @@ export class LoginController {
 
   @Post()
   async loginUser(@Body() data: LoginUserDto, @Res() res: Response) {
-    const { access_token, refresh_token } =
+    const { accessToken, refreshToken } =
       await this.loginService.loginUser(data);
 
-    res.cookie('access_token', access_token, {
+    res.cookie('accessToken', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -20,7 +20,7 @@ export class LoginController {
       maxAge: 1000 * 60 * 60 * 24,
     });
 
-    res.cookie('refresh_token', refresh_token, {
+    res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',

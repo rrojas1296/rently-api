@@ -23,10 +23,10 @@ export class LoginService {
       throw new HttpException('Invalid credentials', 401);
     }
 
-    const { access_token, refresh_token } = await generateTokens({
+    const { accessToken, refreshToken } = await generateTokens({
       sub: user.id,
       email: user.email,
     });
-    return { access_token, refresh_token };
+    return { accessToken, refreshToken };
   }
 }

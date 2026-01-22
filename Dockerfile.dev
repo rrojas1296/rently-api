@@ -1,0 +1,14 @@
+FROM node:24-alpine
+
+RUN apk add --no-cache bash openssl libc6-compat curl
+
+RUN curl -fsSL https://bun.sh/install | bash
+
+ENV PATH="/root/.bun/bin:$PATH"
+
+WORKDIR /app
+
+COPY package.json bun.lockb* ./
+RUN bun install
+
+COPY . .

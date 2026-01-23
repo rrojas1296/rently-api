@@ -1,7 +1,8 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
 import { RegisterService } from '../services/register.service';
 import { RegisterUserDto } from '../dtos/registerUser.dto';
-import { type Response } from 'express';
+import { CookieOptions, type Response } from 'express';
+import { IS_DEV } from 'src/config/environments';
 
 @Controller('register')
 export class RegisterController {
@@ -9,27 +10,28 @@ export class RegisterController {
 
   @Post()
   async registerUser(@Body() data: RegisterUserDto, @Res() res: Response) {
-    const { access_token, refresh_token } =
+    const { accessToken, refreshToken } =
       await this.registerService.registerUser(data);
-    res.cookie('access_token', access_token, {
+
+    const cookieBaseConfig: CookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: IS_DEV,
       sameSite: 'lax',
       path: '/',
+    };
+    res.cookie('accessToken', accessToken, {
+      ...cookieBaseConfig,
       maxAge: 1000 * 60 * 60 * 24,
     });
-
-    res.cookie('refresh_token', refresh_token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 1000 * 60 * 60 * 24 * 7,
+    res.cookie('refreshToken', refreshToken, {
+      ...cookieBaseConfig,
+      maxAge: 1000 * 60 * 60 * 24 * 365,
     });
-
-    return {
-      message: 'User registered successfully',
-      status: 200,
-    };
+    return res
+      .json({
+        message: 'User created successfully',
+        status: HttpStatus.CREATED,
+      })
+      .status(HttpStatus.CREATED);
   }
 }

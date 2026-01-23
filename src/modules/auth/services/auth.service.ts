@@ -1,6 +1,5 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { verifyToken } from '../utils/verifyToken';
-import { REFRESH_SECRET } from 'src/config/environments';
 import { UsersRepository } from 'src/modules/users/repositories/users.repository';
 import { generateTokens } from '../utils/generateTokens';
 
@@ -8,24 +7,70 @@ import { generateTokens } from '../utils/generateTokens';
 export class AuthService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async refreshToken(oldRefreshToken?: string) {
-    if (!oldRefreshToken) {
-      throw new Error('Refresh token is required');
+  async validateSession({
+    accessToken,
+    refreshToken,
+  }: {
+    accessToken: string;
+    refreshToken: string;
+  }) {
+    try {
+      const userDB = await this.validateToken(accessToken, 'accessToken');
+      const { id, email, firstName, lastName, role } = userDB;
+      return {
+        accessToken,
+        isValid: userDB ? true : false,
+        user: {
+          id,
+          email,
+          firstName,
+          lastName,
+          role,
+        },
+      };
+    } catch {
+      if (!refreshToken) return { isValid: false };
+      const newAccessToken = await this.refreshAccessToken(refreshToken);
+      const userDB = await this.validateToken(newAccessToken, 'accessToken');
+      const { id, email, firstName, lastName, role } = userDB;
+      return {
+        accessToken: newAccessToken,
+        isValid: true,
+        user: {
+          id,
+          email,
+          firstName,
+          lastName,
+          role,
+        },
+      };
     }
-    const secret = new TextEncoder().encode(REFRESH_SECRET);
-    const { payload } = await verifyToken(oldRefreshToken, secret);
+  }
+
+  private async refreshAccessToken(oldRefreshToken: string) {
+    try {
+      const userDB = await this.validateToken(oldRefreshToken, 'refreshToken');
+      const { accessToken } = await generateTokens({
+        sub: userDB.id,
+        email: userDB.email,
+      });
+      return accessToken;
+    } catch {
+      throw new HttpException('invalid_token', HttpStatus.UNAUTHORIZED);
+    }
+  }
+
+  private async validateToken(
+    token: string,
+    type: 'accessToken' | 'refreshToken',
+  ) {
+    const { payload } = await verifyToken(token, type);
     const userId = payload.sub;
-    if (!userId) {
-      throw new HttpException('Token dosent has userId', 400);
-    }
+    if (!userId)
+      throw new HttpException('invalid_token', HttpStatus.UNAUTHORIZED);
     const userDB = await this.usersRepository.findById(userId);
-    if (!userDB) {
-      throw new Error('User not found');
-    }
-    const { accessToken, refreshToken } = await generateTokens({
-      sub: userDB.id,
-      email: userDB.email,
-    });
-    return { accessToken, refreshToken };
+    if (!userDB)
+      throw new HttpException('invalid_token', HttpStatus.UNAUTHORIZED);
+    return userDB;
   }
 }

@@ -2,6 +2,7 @@ import { Body, Controller, Post, Res } from '@nestjs/common';
 import { LoginService } from '../services/login.service';
 import { LoginUserDto } from '../dtos/loginUser.dto';
 import { type Response } from 'express';
+import { IS_DEV } from 'src/config/environments';
 
 @Controller('login')
 export class LoginController {
@@ -14,7 +15,7 @@ export class LoginController {
 
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: IS_DEV,
       sameSite: 'lax',
       path: '/',
       maxAge: 1000 * 60 * 60 * 24,
@@ -22,14 +23,14 @@ export class LoginController {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: IS_DEV,
       sameSite: 'lax',
       path: '/',
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
-    return {
+    return res.json({
       message: 'User logged successffully',
       status: 200,
-    };
+    });
   }
 }

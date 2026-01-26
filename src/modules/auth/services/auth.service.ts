@@ -73,4 +73,12 @@ export class AuthService {
       throw new HttpException('invalid_token', HttpStatus.UNAUTHORIZED);
     return userDB;
   }
+
+  async validateEmail(email: string) {
+    const userDB = await this.usersRepository.findByEmail(email);
+    if (userDB) {
+      throw new HttpException('user_already_exist', 400);
+    }
+    return false;
+  }
 }

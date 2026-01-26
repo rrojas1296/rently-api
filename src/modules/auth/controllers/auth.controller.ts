@@ -1,16 +1,14 @@
-import { Controller, Get, HttpStatus, Req, Res } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param, Req, Res } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { CookieOptions, type Request, type Response } from 'express';
 import { IS_DEV } from 'src/config/environments';
-import { sleep } from 'src/shared/utils/sleep';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Get('logout')
-  async logoutUser(@Res() res: Response) {
-    await sleep(2000);
+  logoutUser(@Res() res: Response) {
     const cookieBaseConfig: CookieOptions = {
       httpOnly: true,
       secure: IS_DEV,
@@ -60,5 +58,11 @@ export class AuthController {
       isValid,
       user,
     });
+  }
+
+  @Get('checkEmailExist/:email')
+  async validateEmail(@Param('email') email: string) {
+    const exist = await this.authService.validateEmail(email);
+    return { message: 'Email validated successfully', status: 200, exist };
   }
 }

@@ -17,7 +17,7 @@ export class AuthController {
     };
     res.clearCookie('accessToken', {
       ...cookieBaseConfig,
-      maxAge: 1000 * 10,
+      maxAge: 1000 * 60 * 60 * 24,
     });
     res.clearCookie('refreshToken', {
       ...cookieBaseConfig,
@@ -49,7 +49,7 @@ export class AuthController {
         secure: IS_DEV,
         sameSite: 'lax',
         path: '/',
-        maxAge: 1000 * 10,
+        maxAge: 1000 * 60 * 60 * 24,
       });
     }
     return res.json({

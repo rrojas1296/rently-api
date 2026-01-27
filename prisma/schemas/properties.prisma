@@ -1,0 +1,42 @@
+enum PropertyStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+}
+
+enum PropertyCurrency {
+  EUR
+  USD
+  PEN
+}
+
+enum PropertyCondition {
+  NEW
+  REMODELED
+  MAINTENANCE
+}
+
+model Properties {
+  id             String            @id @default(cuid())
+  name           String
+  address        String
+  internalCode   String
+  floor          Int
+  area           Int
+  status         PropertyStatus    @default(AVAILABLE)
+  monthlyPayment Float
+  garanty        Float
+  currency       PropertyCurrency  @default(USD)
+  monthlyFee     Float?
+  ownerId        String
+  owner          Users              @relation(fields: [ownerId], references: [id])
+  persons        Int
+  rooms          Int
+  bathrooms      Int
+  floors         Int
+  furnished      Boolean           @default(false)
+  pets           Boolean           @default(false)
+  condition      PropertyCondition @default(NEW)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+}

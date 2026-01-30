@@ -23,6 +23,7 @@ export class AuthController {
       ...cookieBaseConfig,
       maxAge: 1000 * 60 * 60 * 24 * 365,
     });
+    console.log('User logged out successfully');
     return res
       .json({
         message: 'User logged out successfully',

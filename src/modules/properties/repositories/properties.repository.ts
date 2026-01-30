@@ -18,6 +18,9 @@ export class PropertiesRepository implements IPropertiesRepository {
       where: {
         ownerId: userId,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
   }
 }

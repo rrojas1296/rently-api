@@ -1,4 +1,3 @@
-//Role
 enum UserRole {
   OWNER
   TENANT

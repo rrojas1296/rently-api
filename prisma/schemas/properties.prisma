@@ -29,7 +29,7 @@ model Properties {
   currency       PropertyCurrency  @default(USD)
   monthlyFee     Float?
   ownerId        String
-  owner          Users              @relation(fields: [ownerId], references: [id])
+  owner          Users             @relation(fields: [ownerId], references: [id])
   persons        Int
   rooms          Int
   bathrooms      Int

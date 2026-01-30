@@ -12,6 +12,6 @@ async function bootstrap() {
   });
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(process.env.PORT ?? 8000, '0.0.0.0');
+  await app.listen(process.env.PORT ?? 8000);
 }
 bootstrap();

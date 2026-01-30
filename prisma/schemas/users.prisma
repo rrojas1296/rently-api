@@ -1,16 +1,41 @@
 enum UserRole {
   OWNER
+  ADMIN
   TENANT
 }
 
 model Users {
+  id             String          @id @default(uuid())
+  firstName      String
+  lastName       String
+  email          String
+  password       String
+  role           UserRole        @default(OWNER)
+  usersProfile   UsersProfile?
+  tenantsProfile TenantsProfile?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model UsersProfile {
   id         String       @id @default(uuid())
-  firstName  String
-  lastName   String
-  email      String
-  password   String
+  userId     String       @unique
+  user       Users        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  phone      String?
+  avatarUrl  String?
   properties Properties[]
-  role       UserRole     @default(OWNER)
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
+}
+
+model TenantsProfile {
+  id         String      @id @default(uuid())
+  userId     String      @unique
+  user       Users       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  propertyId String?
+  property   Properties? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  phone      String?
+  avatarUrl  String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 }

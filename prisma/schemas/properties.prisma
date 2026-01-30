@@ -17,7 +17,7 @@ enum PropertyCondition {
 }
 
 model Properties {
-  id             String            @id @default(cuid())
+  id             String            @id @default(uuid())
   name           String
   address        String
   internalCode   String
@@ -29,7 +29,7 @@ model Properties {
   currency       PropertyCurrency  @default(USD)
   monthlyFee     Float?
   ownerId        String
-  owner          Users             @relation(fields: [ownerId], references: [id])
+  owner          UsersProfile      @relation(fields: [ownerId], references: [id])
   persons        Int
   rooms          Int
   bathrooms      Int

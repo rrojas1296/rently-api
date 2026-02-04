@@ -17,15 +17,35 @@ export class PropertiesRepository implements IPropertiesRepository {
     });
   }
 
-  async findAll(userId: string): Promise<Properties[]> {
-    return await this._prismaService.properties.findMany({
-      where: {
-        ownerId: userId,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
+  async findAll(ownerId: string): Promise<Properties[]> {
+    return this._knexService
+      .db('Properties as p')
+      .select([
+        'p.id as id',
+        'p.name as name',
+        'p.address as address',
+        'p.internalCode as internalCode',
+        'p.floor as floor',
+        'p.area as area',
+        'p.status as status',
+        'p.monthlyPayment as monthlyPayment',
+        'p.garanty as garanty',
+        'p.currency as currency',
+        'p.monthlyFee as monthlyFee',
+        'p.persons as persons',
+        'p.rooms as rooms',
+        'p.bathrooms as bathrooms',
+        'p.floors as floors',
+        'p.furnished as furnished',
+        'p.pets as pets',
+        'p.condition as condition',
+        'p.createdAt as createdAt',
+        'p.updatedAt as updatedAt',
+        'u.firstName as tenantName',
+      ])
+      .leftJoin('TenantsProfile as tp', 'tp.propertyId', 'p.id')
+      .leftJoin('Users as u', 'tp.userId', 'u.id')
+      .where('p.ownerId', ownerId);
   }
 
   async getAvailable(ownerId: string) {

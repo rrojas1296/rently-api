@@ -31,8 +31,12 @@ export class PropertiesService {
     }
   }
 
-  async getAllProperties(userId: string) {
-    return this.propertiesRepository.findAll(userId);
+  async getAllProperties(ownerId: string) {
+    const userProfile = await this._usersProfileRepository.getByUser(ownerId);
+    if (!userProfile) {
+      throw new HttpException('unauthorized', HttpStatus.UNAUTHORIZED);
+    }
+    return this.propertiesRepository.findAll(userProfile.id);
   }
 
   getAvailableProperties(ownerId: string) {

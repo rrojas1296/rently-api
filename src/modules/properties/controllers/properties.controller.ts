@@ -19,8 +19,8 @@ export class PropertiesController {
 
   @Get()
   async getAllProperties(@Req() req: RequestWithUser) {
-    const userId = req.user.id;
-    const properties = await this._propertiesService.getAllProperties(userId);
+    const ownerId = req.user.id;
+    const properties = await this._propertiesService.getAllProperties(ownerId);
     return {
       message: 'Properties found successfully',
       status: 200,

@@ -4,13 +4,24 @@ enum UserRole {
   TENANT
 }
 
+enum DocumentType {
+  DNI
+  PASSPORT
+}
+
+enum UserProvider {
+  GOOGLE
+  PASSWORD
+}
+
 model Users {
   id             String          @id @default(uuid())
   firstName      String
   lastName       String
   email          String
-  password       String
+  password       String?
   role           UserRole        @default(OWNER)
+  provider       UserProvider    @default(PASSWORD)
   usersProfile   UsersProfile?
   tenantsProfile TenantsProfile?
   createdAt      DateTime        @default(now())
@@ -29,13 +40,20 @@ model UsersProfile {
 }
 
 model TenantsProfile {
-  id         String      @id @default(uuid())
-  userId     String      @unique
-  user       Users       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  propertyId String?
-  property   Properties? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  phone      String?
-  avatarUrl  String?
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  id             String       @id @default(uuid())
+  userId         String       @unique
+  user           Users        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  propertyId     String?      @unique
+  property       Properties?  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  nationality    String
+  documentType   DocumentType @default(DNI)
+  documentNumber String
+  phone          String?
+  emergencyPhone String?
+  entryDate      DateTime
+  exitDate       DateTime?
+  paymentDay     Int
+  avatarUrl      String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }

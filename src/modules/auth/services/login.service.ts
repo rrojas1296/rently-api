@@ -15,7 +15,7 @@ export class LoginService {
     if (!user)
       throw new HttpException('invalid_credentials', HttpStatus.UNAUTHORIZED);
 
-    const matchPasswords = await comparePasswords(password, user.password);
+    const matchPasswords = await comparePasswords(password, user.password!);
 
     if (!matchPasswords)
       throw new HttpException('invalid_credentials', HttpStatus.UNAUTHORIZED);

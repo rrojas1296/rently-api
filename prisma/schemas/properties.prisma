@@ -33,6 +33,7 @@ model Properties {
   persons        Int
   rooms          Int
   bathrooms      Int
+  tenant         TenantsProfile?
   floors         Int
   furnished      Boolean           @default(false)
   pets           Boolean           @default(false)

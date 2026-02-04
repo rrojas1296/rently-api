@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { IUsersRepository } from '../interfaces/usersRepository.interface';
 import { PrismaService } from 'src/database/prisma/prisma.service';
-import { Prisma, Users } from 'generated/prisma/client';
+import { Prisma, UserRole, Users } from 'generated/prisma/client';
 
 @Injectable()
 export class UsersRepository implements IUsersRepository {
@@ -14,6 +14,7 @@ export class UsersRepository implements IUsersRepository {
     return this.prismaService.users.findFirst({
       where: {
         email,
+        role: UserRole.OWNER,
       },
     });
   }

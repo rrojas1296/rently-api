@@ -6,6 +6,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
+import { DocumentType } from 'generated/prisma/enums';
 
 export class CreateTenantDto {
   @IsString()
@@ -14,11 +15,11 @@ export class CreateTenantDto {
   @IsString()
   lastName: string;
 
-  @IsString()
-  documentType: string;
+  @IsEnum(DocumentType)
+  documentType: DocumentType;
 
-  @IsNumber()
-  documentNumber: number;
+  @IsString()
+  documentNumber: string;
 
   @IsString()
   nationality: string;
@@ -26,21 +27,21 @@ export class CreateTenantDto {
   @IsString()
   phone: string;
 
+  @IsString()
+  emergencyPhone: string;
+
   @IsEmail()
   email: string;
 
   @IsString()
-  emergencyPhone: string;
-
-  @IsString()
   property: string;
 
-  @IsDate()
-  entryDate: Date;
+  @IsString()
+  entryDate: string;
 
-  @IsDate()
+  @IsString()
   @IsOptional()
-  exitDate?: Date;
+  exitDate?: string;
 
   @IsNumber()
   paymentDay: number;

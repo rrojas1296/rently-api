@@ -24,6 +24,7 @@ model Users {
   provider       UserProvider    @default(PASSWORD)
   usersProfile   UsersProfile?
   tenantsProfile TenantsProfile?
+  properties     Properties[]
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
 }
@@ -34,7 +35,6 @@ model UsersProfile {
   user       Users        @relation(fields: [userId], references: [id], onDelete: Cascade)
   phone      String?
   avatarUrl  String?
-  properties Properties[]
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
 }

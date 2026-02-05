@@ -49,6 +49,7 @@ export class PropertiesRepository implements IPropertiesRepository {
   }
 
   async getAvailable(ownerId: string) {
+    console.log({ ownerId });
     return this._knexService
       .db('Properties as p')
       .select(['p.id as id', 'p.name as name'])

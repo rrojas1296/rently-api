@@ -9,5 +9,6 @@ import { UsersModule } from '../users/users.module';
   providers: [PropertiesService, PropertiesRepository],
   controllers: [PropertiesController],
   imports: [KnexModule, UsersModule],
+  exports: [PropertiesRepository],
 })
 export class PropertiesModule {}

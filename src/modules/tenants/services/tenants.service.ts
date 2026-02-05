@@ -66,4 +66,8 @@ export class TenantsService {
       throw new HttpException('server_error', HttpStatus.BAD_REQUEST);
     }
   }
+
+  getTenants(ownerId: string) {
+    return this._tenantRepository.getAll(ownerId);
+  }
 }

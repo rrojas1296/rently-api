@@ -15,9 +15,8 @@ enum UserProvider {
 }
 
 enum TenantPaymentStatus {
-  PENDING
   PAID
-  DUE_SOON
+  UNPAID
 }
 
 model Users {
@@ -33,6 +32,7 @@ model Users {
   properties     Properties[]
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
+  deleted        Boolean         @default(false)
 }
 
 model UsersProfile {
@@ -43,6 +43,7 @@ model UsersProfile {
   avatarUrl String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deleted   Boolean  @default(false)
 }
 
 model TenantsProfile {
@@ -55,12 +56,14 @@ model TenantsProfile {
   documentType   DocumentType        @default(DNI)
   documentNumber String
   phone          String?
-  paymentStatus  TenantPaymentStatus @default(PAID)
+  paymentDay     Int
+  paymentStatus  TenantPaymentStatus @default(UNPAID)
+  lastPaymentAt  DateTime?
   emergencyPhone String?
   entryDate      DateTime
   exitDate       DateTime?
-  paymentDay     Int
   avatarUrl      String?
   createdAt      DateTime            @default(now())
   updatedAt      DateTime            @updatedAt
+  deleted        Boolean             @default(false)
 }

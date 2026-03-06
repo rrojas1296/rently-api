@@ -40,5 +40,6 @@ model Properties {
   condition      PropertyCondition @default(NEW)
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
+  payments       Paymets[]
   deleted        Boolean           @default(false)
 }

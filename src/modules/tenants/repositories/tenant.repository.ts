@@ -45,6 +45,7 @@ export class TenantRepository {
       .where('p.ownerId', ownerId)
       .andWhere('u.role', UserRole.TENANT)
       .rightJoin('TenantsProfile as tp', 'tp.userId', 'u.id')
-      .rightJoin('Properties as p', 'p.id', 'tp.propertyId');
+      .rightJoin('Properties as p', 'p.id', 'tp.propertyId')
+      .orderBy('u.createdAt', 'desc');
   }
 }

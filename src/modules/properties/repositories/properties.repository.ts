@@ -43,13 +43,13 @@ export class PropertiesRepository implements IPropertiesRepository {
         'p.updatedAt as updatedAt',
         'u.firstName as tenantName',
       ])
+      .orderBy('p.createdAt', 'desc')
       .leftJoin('TenantsProfile as tp', 'tp.propertyId', 'p.id')
       .leftJoin('Users as u', 'tp.userId', 'u.id')
       .where('p.ownerId', ownerId);
   }
 
   async getAvailable(ownerId: string) {
-    console.log({ ownerId });
     return this._knexService
       .db('Properties as p')
       .select(['p.id as id', 'p.name as name'])

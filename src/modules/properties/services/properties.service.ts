@@ -10,7 +10,6 @@ export class PropertiesService {
   async createProperty(data: CreatePropertyDto, ownerId: string) {
     try {
       const id = uuidv4();
-      console.log({ ownerId });
       const property = await this.propertiesRepository.create({
         ...data,
         owner: {

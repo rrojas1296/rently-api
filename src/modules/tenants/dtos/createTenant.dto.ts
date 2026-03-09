@@ -28,7 +28,8 @@ export class CreateTenantDto {
   phone: string;
 
   @IsString()
-  emergencyPhone: string;
+  @IsOptional()
+  emergencyPhone?: string;
 
   @IsEmail()
   email: string;

@@ -70,4 +70,8 @@ export class TenantsService {
   getTenants(ownerId: string) {
     return this._tenantRepository.getAll(ownerId);
   }
+
+  getTenantsWithPayments(ownerId: string) {
+    return this._tenantRepository.getTenantsWithPayments(ownerId);
+  }
 }

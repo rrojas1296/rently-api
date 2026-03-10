@@ -1,10 +1,16 @@
 model Paymets {
-  id         String     @id @default(uuid())
-  userId     String     @unique
-  user       Users      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  propertyId String     @unique
-  property   Properties @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  amount     Float
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id               String     @id @default(uuid())
+  userId           String     @unique
+  user             Users      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  propertyId       String     @unique
+  property         Properties @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  amount           Float
+  paymentMethod    String
+  paymentType      String
+  urlImage         String
+  discount         Float?
+  additionalCharge Float?
+  latePenalty      Float?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
 }

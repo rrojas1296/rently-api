@@ -65,4 +65,12 @@ export class PropertiesRepository implements IPropertiesRepository {
       data,
     });
   }
+
+  async getPropertisWithPayments(ownerId: string) {
+    return this._knexService
+      .db('Properties as p')
+      .select(['p.id as id', 'p.name as name'])
+      .where('p.ownerId', ownerId)
+      .innerJoin('TenantsProfile as tp', 'tp.propertyId', 'p.id');
+  }
 }

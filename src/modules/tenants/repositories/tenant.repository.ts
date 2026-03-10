@@ -48,4 +48,20 @@ export class TenantRepository {
       .rightJoin('Properties as p', 'p.id', 'tp.propertyId')
       .orderBy('u.createdAt', 'desc');
   }
+
+  async getTenantsWithPayments(ownerId: string) {
+    return this._knexService
+      .db('Users as u')
+      .select(
+        'u.id as id',
+        this._knexService.db.raw(
+          'CONCAT(u."firstName", \' \', u."lastName") as name',
+        ),
+      )
+      .where('p.ownerId', ownerId)
+      .andWhere('u.role', UserRole.TENANT)
+      .rightJoin('TenantsProfile as tp', 'tp.userId', 'u.id')
+      .rightJoin('Properties as p', 'p.id', 'tp.propertyId')
+      .orderBy('name', 'asc');
+  }
 }

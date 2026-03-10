@@ -9,5 +9,6 @@ import { PropertiesModule } from '../properties/properties.module';
   providers: [TenantsService, TenantRepository],
   controllers: [TenantsController],
   imports: [UsersModule, PropertiesModule],
+  exports: [TenantRepository],
 })
 export class TenantsModule {}

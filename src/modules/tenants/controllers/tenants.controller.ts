@@ -38,4 +38,15 @@ export class TenantsController {
       hasTenants: tenants.length > 0,
     };
   }
+
+  @Get('with-payments')
+  async getTenantsWithPatyments(@Req() req: RequestWithUser) {
+    const ownerId = req.user.id;
+    const tenants = await this._tenantService.getTenantsWithPayments(ownerId);
+    return {
+      message: 'Tenants found successfully',
+      status: HttpStatus.OK,
+      tenants,
+    };
+  }
 }
